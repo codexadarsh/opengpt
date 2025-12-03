@@ -1,5 +1,5 @@
 "use client";
-
+import type { BundledTheme } from "shiki";
 import { Button } from "@/components/ui/button";
 import {
   ButtonGroup,
@@ -305,10 +305,12 @@ export const MessageBranchPage = ({
 };
 
 export type MessageResponseProps = ComponentProps<typeof Streamdown>;
+const themes = [ "aurora-x", "aurora-x"] as [BundledTheme, BundledTheme];
 
 export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
     <Streamdown
+      shikiTheme={themes}
       className={cn(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
         className

@@ -1,4 +1,4 @@
-import { Home } from "lucide-react";
+import { Home, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -25,8 +25,8 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarContent className="bg-[#020013] text-secondary">
-        <h1 className="text-center font-medium text-xl mt-2">OpenGPT</h1>
+      <SidebarContent className="bg-popover text-secondary">
+        <h1 className="text-center font-semibold text-xl mt-2">OpenGPT</h1>
         <SidebarGroup>
           <Button
             variant={"secondary"}
@@ -34,8 +34,11 @@ export function AppSidebar() {
           >
             new chat
           </Button>
-          <Input className="bg-background" placeholder="Search..." />
-          <SidebarGroupLabel className="text-[#3DADFF]">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input className="pl-9 bg-background" placeholder="Search..." />
+          </div>
+          <SidebarGroupLabel className="text-muted">
             Recent
           </SidebarGroupLabel>
           <SidebarGroupContent>
