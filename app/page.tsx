@@ -51,7 +51,7 @@ import { Loader } from "@/components/ai-elements/loader";
 const models = [
   {
     name: "grok-4.1-fast",
-    value: "x-ai/grok-4.1-fast:free",
+    value: "x-ai/grok-4.1-fast",
   },
   {
     name: "kat-coder-pro",
@@ -206,7 +206,7 @@ const ChatBotDemo = () => {
                 </PromptInputActionMenuContent>
               </PromptInputActionMenu>
               <PromptInputButton
-                variant={webSearch ? "default" : "ghost"}
+                variant={webSearch ? "secondary" : "ghost"}
                 onClick={() => setWebSearch(!webSearch)}
               >
                 <GlobeIcon size={16} />

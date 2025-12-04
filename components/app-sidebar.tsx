@@ -25,22 +25,23 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarContent className="bg-popover text-secondary">
+      <SidebarContent>
         <h1 className="text-center font-semibold text-xl mt-2">OpenGPT</h1>
         <SidebarGroup>
           <Button
-            variant={"secondary"}
-            className="w-full bg-muted hover:bg-muted/80 text-background mb-2"
+            variant="default"
+            className="bg-muted hover:bg-muted/80 text-background  mb-2"
           >
             new chat
           </Button>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input className="pl-9 bg-background" placeholder="Search..." />
+            <Input
+              className="pl-9 bg-background border-none"
+              placeholder="Search..."
+            />
           </div>
-          <SidebarGroupLabel className="text-muted">
-            Recent
-          </SidebarGroupLabel>
+          <SidebarGroupLabel className="text-primary">Recent</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
