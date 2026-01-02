@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     webSearch,
   }: {
     messages: UIMessage[];
-    model: string; 
+    model: string;
     webSearch: boolean;
   } = await req.json();
 

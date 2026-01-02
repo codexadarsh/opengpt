@@ -28,20 +28,19 @@ export function AppSidebar() {
       <SidebarContent>
         <h1 className="text-center font-semibold text-xl mt-2">OpenGPT</h1>
         <SidebarGroup>
-          <Button
-            variant="default"
-            className="bg-muted hover:bg-muted/80 text-background  mb-2"
-          >
-            new chat
-          </Button>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              className="pl-9 bg-background border-none"
-              placeholder="Search..."
-            />
+          <div className=" flex flex-col gap-4">
+            <Button variant="default">new chat</Button>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                className="pl-9 bg-background"
+                placeholder="Search..."
+              />
+            </div>
           </div>
-          <SidebarGroupLabel className="text-primary">Recent</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground">
+            Recent
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
