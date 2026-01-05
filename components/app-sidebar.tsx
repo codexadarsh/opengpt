@@ -32,10 +32,7 @@ export function AppSidebar() {
             <Button variant="default">new chat</Button>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                className="pl-9 bg-background"
-                placeholder="Search..."
-              />
+              <Input className="pl-9 bg-background" placeholder="Search..." />
             </div>
           </div>
           <SidebarGroupLabel className="text-muted-foreground">
