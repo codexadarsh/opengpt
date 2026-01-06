@@ -1,6 +1,6 @@
+"use client";
 import { Home, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +12,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Input } from "./ui/input";
+import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -23,6 +27,17 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const router = useRouter();
+  const logout = async () => {
+    try {
+      await axios.get("/api/users/logout");
+      toast.success("Logout successful");
+      router.push("/login");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -43,16 +58,19 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <Button onClick={logout} variant={"destructive"}>
+          Logout
+        </Button>
       </SidebarContent>
     </Sidebar>
   );

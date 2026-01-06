@@ -69,6 +69,7 @@ const models = [
     name: "qwen-3-coder",
     value: "qwen/qwen3-coder:free",
   },
+  { name: "gemma-3-27b", value: "google/gemma-3-27b-it:free" },
 ];
 const ChatBotDemo = () => {
   const [input, setInput] = useState("");
@@ -206,7 +207,7 @@ const ChatBotDemo = () => {
                 </PromptInputActionMenuContent>
               </PromptInputActionMenu>
               <PromptInputButton
-                variant={webSearch ? "secondary" : "ghost"}
+                variant={webSearch ? "default" : "ghost"}
                 onClick={() => setWebSearch(!webSearch)}
               >
                 <GlobeIcon size={16} />
