@@ -4,12 +4,25 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen mx-auto">
+    <main className="min-h-screen mx-auto bg-background text-foreground">
       {/* Header */}
-      <header className="flex items-center justify-between px-8 py-4 border-b border-border bg-background">
+      <header className="flex items-center justify-between px-8 py-4 border-b border-border">
         <div className="text-xl font-semibold tracking-tight">OpenGPT</div>
 
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-5">
+          <Link
+            href="/docs"
+            className="text-sm text-muted-foreground hover:text-foreground transition"
+          >
+            Docs
+          </Link>
+          <Link
+            href="https://github.com/codexadarsh/opengpt"
+            target="_blank"
+            className="text-sm text-muted-foreground hover:text-foreground transition"
+          >
+            GitHub
+          </Link>
           <Button asChild>
             <Link href="/chat">Start Chat</Link>
           </Button>
@@ -17,35 +30,33 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="bg-secondary border-b border-border">
-        <div className="py-28 max-w-6xl mx-auto text-center">
-          <h1 className="text-6xl font-medium tracking-tight">
-            Free, open-source <br />
-            Access to all models.
+      <section className="border-b border-border">
+        <div className="py-28 max-w-6xl mx-auto text-center px-6">
+          <h1 className="text-6xl md:text-7xl font-medium tracking-tight">
+            One chat UI. <br />
+            All major AI models.
           </h1>
 
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-            OpenGPT is a unified chat interface for Grok, GPT 5, Claude, Gemini,
-            and open-source models. Pick the model you want and chat — no
-            switching tools, no vendor lock-in.
+            OpenGPT is an open-source, unified chat interface for GPT-5, Claude,
+            Gemini, Grok, and open-source models. Switch models instantly —
+            without switching tools or workflows.
           </p>
 
           <div className="mt-10 flex justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href="/chat">Start Chat</Link>
+              <Link href="/chat">Start chatting</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="https://github.com/codexadarsh/opengpt">
-                Source Code
-              </Link>
+              <Link href="/docs">How it works</Link>
             </Button>
           </div>
 
           {/* Product Preview */}
           <div className="mt-20">
-            <div className="rounded-xl bg-background p-2 shadow-sm max-w-5xl mx-auto">
+            <div className="rounded-xl border border-border p-2 shadow-sm max-w-5xl mx-auto">
               <Image
-                src="/opengpt.png"
+                src="/hero.png"
                 alt="OpenGPT unified chat interface"
                 width={1200}
                 height={700}
@@ -57,14 +68,43 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Features */}
+      <section className="py-24 max-w-6xl mx-auto px-6">
+        <div className="grid gap-6 md:grid-cols-3">
+          <Feature
+            title="Multi-model conversations"
+            description="Switch between GPT-5, Claude, Gemini, Grok, and open models inside the same interface."
+          />
+          <Feature
+            title="Open-source & self-hosted"
+            description="No vendor lock-in. Run OpenGPT locally or deploy it on your own infrastructure."
+          />
+          <Feature
+            title="Unified chat history"
+            description="One conversation history across all models — no fragmented tools or tabs."
+          />
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="px-6 py-6 border-t border-border text-sm text-muted-foreground flex justify-between">
-        <span>© {new Date().getFullYear()} OpenGPT</span>
-        <span>design & developed by codexadarsh</span>
+      <footer className="px-6 py-6 border-t border-border text-sm text-muted-foreground flex flex-col md:flex-row justify-between gap-2">
+        <span>© {new Date().getFullYear()} OpenGPT · MIT License</span>
+        <span>
+          Built by{" "}
+          <a
+            href="https://github.com/codexadarsh"
+            target="_blank"
+            className="underline hover:text-foreground"
+          >
+            codexadarsh
+          </a>
+        </span>
       </footer>
     </main>
   );
 }
+
+/* ---------------- Components ---------------- */
 
 function Feature({
   title,
@@ -77,15 +117,6 @@ function Feature({
     <div className="rounded-lg border border-border bg-secondary p-6">
       <h3 className="font-medium">{title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-    </div>
-  );
-}
-
-function ModelCard({ name, detail }: { name: string; detail: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-background p-4">
-      <div className="font-medium">{name}</div>
-      <div className="text-sm text-muted-foreground">{detail}</div>
     </div>
   );
 }
