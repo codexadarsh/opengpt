@@ -1,18 +1,20 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ChatHistoryProvider } from "@/contexts/chat-history-context";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <ChatHistoryProvider>
       <SidebarProvider>
         <AppSidebar />
-        <main>
+        <main className="flex-1 flex flex-col">
           <SidebarTrigger />
+          {children}
         </main>
-        {children}
       </SidebarProvider>
-    </div>
+    </ChatHistoryProvider>
   );
 };
 
 export default layout;
+

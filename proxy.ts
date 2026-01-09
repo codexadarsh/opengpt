@@ -9,14 +9,16 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value || "";
 
   if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
+    return NextResponse.redirect(new URL("/chat", request.nextUrl));
   }
 
   if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL("/login", request.nextUrl));
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/chat", "/login", "/signup"],
+  matcher: ["/chat", "/chat/:path*", "/login", "/signup"],
 };
