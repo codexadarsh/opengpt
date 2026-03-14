@@ -18,8 +18,12 @@ function getUserIdFromToken(request: NextRequest): string | null {
       id: string;
     };
     return decoded.id;
-  } catch (error: any) {
-    console.error("Token verification error:", error.message);
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Unknown token verification error";
+    console.error("Token verification error:", message);
     return null;
   }
 }
@@ -53,7 +57,7 @@ export async function GET(request: NextRequest) {
     }));
 
     return NextResponse.json({ chats: formattedChats });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching chats:", error);
     return NextResponse.json(
       { message: "Failed to fetch chats" },
@@ -88,8 +92,8 @@ export async function POST(request: NextRequest) {
         $set: {
           title:
             title ||
-            (messages?.[0]?.content?.slice(0, 50) +
-              (messages?.[0]?.content?.length > 50 ? "..." : "")) ||
+            messages?.[0]?.content?.slice(0, 50) +
+              (messages?.[0]?.content?.length > 50 ? "..." : "") ||
             "New Chat",
           messages: messages || [],
           updatedAt: new Date(),
@@ -113,7 +117,7 @@ export async function POST(request: NextRequest) {
         messages: chat.messages,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error saving chat:", error);
     return NextResponse.json(
       { message: "Failed to save chat" },
@@ -149,7 +153,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     return NextResponse.json({ message: "Chat deleted successfully" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting chat:", error);
     return NextResponse.json(
       { message: "Failed to delete chat" },

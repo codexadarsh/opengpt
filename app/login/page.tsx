@@ -14,12 +14,11 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export function CardDemo() {
   const router = useRouter();
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -31,19 +30,15 @@ export function CardDemo() {
       console.log("signup success", response.data);
       router.push("/chat");
       toast.success("login successfully");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("login failed", error);
-      toast.error(error.message);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please try again.";
+      toast.error(message);
     }
   };
-
-  useEffect(() => {
-    if (user.email.length > 0 && user.password.length > 0) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [user]);
   return (
     <div className="flex justify-center items-center min-h-screen">
       <Card className="w-full max-w-sm">
@@ -97,7 +92,9 @@ export function CardDemo() {
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" className="w-full" onClick={onLogin}>
-            {buttonDisabled ? "Please fill all the fields" : "login"}
+            {user.email.length > 0 && user.password.length > 0
+              ? "login"
+              : "Please fill all the fields"}
           </Button>
           {/* <Button variant="outline" className="w-full">
             Login with Google

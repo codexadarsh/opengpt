@@ -8,14 +8,13 @@ export async function connectDB() {
       console.log("Connected to MongoDB");
     });
 
-    connection.on("error", (error:any) => {
+    connection.on("error", (error: Error) => {
       console.log("Error connecting to MongoDB", error);
       process.exit();
     });
 
     console.log("Connected to MongoDB");
-  } catch (error) {
-    console.log(error);
-    console.log("Error connecting to MongoDB");
+  } catch (error: unknown) {
+    console.log("Error connecting to MongoDB", error);
   }
 }

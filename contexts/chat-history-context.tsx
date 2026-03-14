@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext } from "react";
 import { useChatHistory, ChatHistoryItem } from "@/hooks/use-chat-history";
 
 interface ChatHistoryContextType {
@@ -32,25 +32,8 @@ export function ChatHistoryProvider({
 }) {
   const chatHistory = useChatHistory();
 
-  const value = useMemo(
-    () => chatHistory,
-    [
-      chatHistory.history,
-      chatHistory.isLoaded,
-      chatHistory.isLoading,
-      chatHistory.createChat,
-      chatHistory.updateChat,
-      chatHistory.deleteChat,
-      chatHistory.getChat,
-      chatHistory.fetchChat,
-      chatHistory.clearHistory,
-      chatHistory.groupedHistory,
-      chatHistory.refetch,
-    ]
-  );
-
   return (
-    <ChatHistoryContext.Provider value={value}>
+    <ChatHistoryContext.Provider value={chatHistory}>
       {children}
     </ChatHistoryContext.Provider>
   );

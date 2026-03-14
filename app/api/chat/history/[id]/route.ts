@@ -52,7 +52,7 @@ export async function GET(
         })),
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching chat:", error);
     return NextResponse.json(
       { message: "Failed to fetch chat" },

@@ -27,7 +27,7 @@ export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
-  const { history, groupedHistory, deleteChat, createChat, isLoading } =
+  const { groupedHistory, deleteChat, createChat, isLoading } =
     useChatHistoryContext();
 
   const logout = async () => {
@@ -35,8 +35,12 @@ export function AppSidebar() {
       await axios.get("/api/users/logout");
       toast.success("Logout successful");
       router.push("/login");
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Logout failed. Please try again.";
+      toast.error(message);
     }
   };
 
@@ -67,7 +71,7 @@ export function AppSidebar() {
     if (!searchQuery.trim()) return groups;
 
     const query = searchQuery.toLowerCase();
-    const filterGroup = (items: typeof history) =>
+    const filterGroup = (items: typeof groups.today) =>
       items.filter((chat) => chat.title.toLowerCase().includes(query));
 
     return {
@@ -77,7 +81,7 @@ export function AppSidebar() {
       lastMonth: filterGroup(groups.lastMonth),
       older: filterGroup(groups.older),
     };
-  }, [groupedHistory, searchQuery, history]);
+  }, [groupedHistory, searchQuery]);
 
   const renderChatGroup = (
     label: string,
@@ -134,9 +138,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center justify-between px-2 py-1">
-          <h1 className="font-semibold text-lg">
-            OpenGPT
-          </h1>
+          <h1 className="font-semibold text-lg">OpenGPT</h1>
         </div>
         <div className="flex flex-col gap-2 px-2">
           <Button
@@ -164,7 +166,9 @@ export function AppSidebar() {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-8 px-4">
               <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-              <p className="text-sm text-muted-foreground mt-2">Loading chats...</p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Loading chats...
+              </p>
             </div>
           ) : hasHistory ? (
             <>

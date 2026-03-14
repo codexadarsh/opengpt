@@ -2,17 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import {
-  type CSSProperties,
-  type ElementType,
-  type JSX,
-  memo,
-  useMemo,
-} from "react";
+import { type CSSProperties, memo, useMemo } from "react";
 
 export type TextShimmerProps = {
   children: string;
-  as?: ElementType;
   className?: string;
   duration?: number;
   spread?: number;
@@ -20,14 +13,13 @@ export type TextShimmerProps = {
 
 const ShimmerComponent = ({
   children,
-  as: Component = "p",
   className,
   duration = 2,
   spread = 2,
 }: TextShimmerProps) => {
-  const MotionComponent = motion.create(
-    Component as keyof JSX.IntrinsicElements
-  );
+  // Keep a stable motion component; we don't dynamically create components
+  // during render to comply with React's purity rules.
+  const MotionComponent = motion.span;
 
   const dynamicSpread = useMemo(
     () => (children?.length ?? 0) * spread,

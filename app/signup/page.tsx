@@ -14,12 +14,11 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
-export function page() {
+export function SignupPage() {
   const router = useRouter();
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -32,23 +31,15 @@ export function page() {
       console.log("signup success", response.data);
       router.push("/login");
       toast.success("User created successfully");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("signup error", error);
-      toast.error(error.message);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Signup failed. Please try again.";
+      toast.error(message);
     }
   };
-
-  useEffect(() => {
-    if (
-      user.username.length > 0 &&
-      user.email.length > 0 &&
-      user.password.length > 0
-    ) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [user]);
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -116,7 +107,11 @@ export function page() {
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" onClick={onSignup} className="w-full">
-            {buttonDisabled ? "Please fill all the fields" : "Register"}
+            {user.username.length > 0 &&
+            user.email.length > 0 &&
+            user.password.length > 0
+              ? "Register"
+              : "Please fill all the fields"}
           </Button>
           {/* <Button variant="outline" className="w-full">
             Login with Google
@@ -126,4 +121,4 @@ export function page() {
     </div>
   );
 }
-export default page;
+export default SignupPage;
