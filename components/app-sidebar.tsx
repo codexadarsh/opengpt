@@ -85,8 +85,8 @@ export function AppSidebar() {
 
   const renderChatGroup = (
     label: string,
-    items: Array<{ id: string; title: string }>,
-    showLabel: boolean = true,
+    items: typeof history,
+    showLabel: boolean = true
   ) => {
     if (items.length === 0) return null;
 
