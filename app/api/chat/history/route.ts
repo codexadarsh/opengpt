@@ -3,32 +3,49 @@ import { connectDB } from "@/lib/mongodb";
 import Chat from "@/app/database/chat.model";
 import jwt from "jsonwebtoken";
 
-// Helper to get user ID from token
+// ---- Types ----
+interface JwtPayload {
+  id: string;
+}
+
+interface Message {
+  id: string;
+  role: string;
+  content: string;
+}
+
+// ---- Auth Helper ----
 function getUserIdFromToken(request: NextRequest): string | null {
   try {
     const token = request.cookies.get("token")?.value;
-    if (!token) return null;
+    if (!token || !process.env.JWT_SECRET) return null;
 
-    if (!process.env.JWT_SECRET) {
-      console.error("JWT_SECRET not configured");
-      return null;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (typeof decoded === "object" && decoded !== null && "id" in decoded) {
+      return (decoded as JwtPayload).id;
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
-      id: string;
-    };
-    return decoded.id;
-  } catch (error: unknown) {
-    const message =
-      error instanceof Error
-        ? error.message
-        : "Unknown token verification error";
-    console.error("Token verification error:", message);
+    return null;
+  } catch (error) {
+    console.error("Token verification failed:", error);
     return null;
   }
 }
 
-// GET - Fetch all chats for the current user
+// ---- Utils ----
+function generateTitle(title?: string, messages?: Message[]) {
+  if (title) return title;
+
+  const firstMessage = messages?.[0]?.content;
+  if (!firstMessage) return "New Chat";
+
+  return firstMessage.length > 50
+    ? firstMessage.slice(0, 50) + "..."
+    : firstMessage;
+}
+
+// ---- GET ----
 export async function GET(request: NextRequest) {
   try {
     const userId = getUserIdFromToken(request);
@@ -41,15 +58,15 @@ export async function GET(request: NextRequest) {
     const chats = await Chat.find({ userId })
       .sort({ updatedAt: -1 })
       .select("chatId title messages updatedAt createdAt")
-      .lean();
+      .lean()
+      .exec();
 
-    // Transform to match frontend format
-    const formattedChats = chats.map((chat) => ({
+    const formattedChats = chats.map((chat: any) => ({
       id: chat.chatId,
       title: chat.title,
       createdAt: chat.createdAt,
       updatedAt: chat.updatedAt,
-      messages: chat.messages.map((msg) => ({
+      messages: (chat.messages || []).map((msg: any) => ({
         id: msg.id,
         role: msg.role,
         content: msg.content,
@@ -57,16 +74,16 @@ export async function GET(request: NextRequest) {
     }));
 
     return NextResponse.json({ chats: formattedChats });
-  } catch (error: unknown) {
-    console.error("Error fetching chats:", error);
+  } catch (error) {
+    console.error("GET chats error:", error);
     return NextResponse.json(
       { message: "Failed to fetch chats" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-// POST - Create a new chat or update existing
+// ---- POST ----
 export async function POST(request: NextRequest) {
   try {
     const userId = getUserIdFromToken(request);
@@ -76,26 +93,33 @@ export async function POST(request: NextRequest) {
 
     await connectDB();
 
-    const { chatId, title, messages } = await request.json();
+    const body = await request.json();
+    const { chatId, title, messages } = body;
 
     if (!chatId) {
       return NextResponse.json(
         { message: "Chat ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Upsert - create if doesn't exist, update if exists
+    // Basic validation
+    const safeMessages: Message[] = Array.isArray(messages)
+      ? messages.filter(
+          (m) =>
+            m &&
+            typeof m.id === "string" &&
+            typeof m.role === "string" &&
+            typeof m.content === "string",
+        )
+      : [];
+
     const chat = await Chat.findOneAndUpdate(
       { chatId, userId },
       {
         $set: {
-          title:
-            title ||
-            messages?.[0]?.content?.slice(0, 50) +
-              (messages?.[0]?.content?.length > 50 ? "..." : "") ||
-            "New Chat",
-          messages: messages || [],
+          title: generateTitle(title, safeMessages),
+          messages: safeMessages,
           updatedAt: new Date(),
         },
         $setOnInsert: {
@@ -104,8 +128,8 @@ export async function POST(request: NextRequest) {
           createdAt: new Date(),
         },
       },
-      { upsert: true, new: true }
-    );
+      { upsert: true, new: true },
+    ).exec();
 
     return NextResponse.json({
       message: "Chat saved successfully",
@@ -117,16 +141,16 @@ export async function POST(request: NextRequest) {
         messages: chat.messages,
       },
     });
-  } catch (error: unknown) {
-    console.error("Error saving chat:", error);
+  } catch (error) {
+    console.error("POST chat error:", error);
     return NextResponse.json(
       { message: "Failed to save chat" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-// DELETE - Delete a chat
+// ---- DELETE ----
 export async function DELETE(request: NextRequest) {
   try {
     const userId = getUserIdFromToken(request);
@@ -134,30 +158,29 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url);
-    const chatId = searchParams.get("chatId");
+    const chatId = request.nextUrl.searchParams.get("chatId");
 
     if (!chatId) {
       return NextResponse.json(
         { message: "Chat ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     await connectDB();
 
-    const result = await Chat.findOneAndDelete({ chatId, userId });
+    const result = await Chat.findOneAndDelete({ chatId, userId }).exec();
 
     if (!result) {
       return NextResponse.json({ message: "Chat not found" }, { status: 404 });
     }
 
     return NextResponse.json({ message: "Chat deleted successfully" });
-  } catch (error: unknown) {
-    console.error("Error deleting chat:", error);
+  } catch (error) {
+    console.error("DELETE chat error:", error);
     return NextResponse.json(
       { message: "Failed to delete chat" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

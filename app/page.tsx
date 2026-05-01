@@ -11,33 +11,34 @@ import {
 } from "lucide-react";
 
 export default function LandingPage() {
-  const year = new Date().getFullYear();
-
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-secondary">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl border bg-secondary">
               <Sparkles className="h-4 w-4" />
             </span>
-            <span className="text-base font-semibold tracking-tight">
-              OpenGPT
-            </span>
+            <span className="font-semibold tracking-tight">OpenGPT</span>
           </Link>
 
-          <nav className="hidden items-center gap-6 md:flex">
+          <nav
+            className="hidden items-center gap-6 md:flex"
+            aria-label="Main navigation"
+          >
             <Link
               href="/docs"
-              className="text-sm text-muted-foreground hover:text-foreground transition"
+              className="text-sm text-muted-foreground hover:text-foreground"
             >
               Docs
             </Link>
+
             <Link
               href="https://github.com/codexadarsh/opengpt"
               target="_blank"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
               <Github className="h-4 w-4" />
               GitHub
@@ -48,7 +49,6 @@ export default function LandingPage() {
             </Button>
           </nav>
 
-          {/* Mobile CTA only (simple, no hamburger UI bloat) */}
           <div className="md:hidden">
             <Button size="sm" asChild>
               <Link href="/chat">Start</Link>
@@ -59,125 +59,105 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="border-b border-border/60">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 text-xs text-muted-foreground">
-              <Check className="h-4 w-4" />
-              Unified UI • Multi-model • Self-hostable
-            </div>
-
-            <h1 className="mt-6 text-4xl font-semibold tracking-tight md:text-6xl">
-              One chat UI.
-              <br />
-              All major AI models.
-            </h1>
-
-            <p className="mt-5 text-base text-muted-foreground md:text-lg">
-              OpenGPT is an open-source, unified chat interface for GPT models,
-              Claude, Gemini, Grok, and open-source models. Switch
-              instantly—without switching tools.
-            </p>
-
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button size="lg" className="w-full sm:w-auto" asChild>
-                <Link href="/chat">Start chatting</Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto"
-                asChild
-              >
-                <Link href="/docs" className="inline-flex items-center gap-2">
-                  <BookOpen className="h-4 w-4" />
-                  How it works
-                </Link>
-              </Button>
-            </div>
-
-            <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-              <span>• Switch models per message</span>
-              <span>• One shared history</span>
-              <span>• Run locally</span>
-            </div>
+        <div className="mx-auto max-w-6xl px-6 py-24 md:py-32 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border bg-secondary px-4 py-2 text-xs text-muted-foreground">
+            <Check className="h-4 w-4" />
+            Unified UI • Multi-model • Self-hostable
           </div>
 
-          {/* Product Preview */}
-          <div className="mt-14">
-            <div className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-border bg-secondary shadow-sm">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/40" />
-              <Image
-                src="/hero.png"
-                alt="OpenGPT unified chat interface"
-                width={1400}
-                height={800}
-                className="h-auto w-full"
-                priority
-              />
-            </div>
+          <h1 className="mt-6 text-4xl font-semibold tracking-tight md:text-6xl leading-tight">
+            Stop switching tools.
+            <br />
+            <span className="text-primary">Use every AI in one place.</span>
+          </h1>
+
+          <p className="mt-5 text-muted-foreground md:text-lg max-w-xl mx-auto">
+            OpenGPT brings GPT, Claude, Gemini, Grok, and open models into a
+            single interface. Faster workflow, zero friction.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+            <Button size="lg" asChild>
+              <Link href="/chat">Start chatting</Link>
+            </Button>
+
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/docs" className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                How it works
+              </Link>
+            </Button>
+          </div>
+
+          {/* Preview */}
+          <div className="mt-16 relative mx-auto max-w-5xl rounded-2xl overflow-hidden border bg-secondary">
+            <Image
+              src="/hero1.png"
+              alt="OpenGPT UI preview"
+              width={1400}
+              height={800}
+              priority
+              className="w-full h-auto"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-linear-gradient dark:bg-linear-gradient-dark bg-to-t from-background/50 to-transparent" />
           </div>
         </div>
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+      <section className="mx-auto max-w-6xl px-6 py-20">
         <div className="grid gap-6 md:grid-cols-3">
           <Feature
             icon={<Sparkles className="h-4 w-4" />}
             title="Multi-model conversations"
-            description="Switch between providers inside the same UI—per message, per chat, or per workflow."
+            description="Switch models instantly per message or workflow."
           />
           <Feature
             icon={<Shield className="h-4 w-4" />}
-            title="Open-source & self-hosted"
-            description="No lock-in. Run locally, deploy on your infra, and control your data + keys."
+            title="Self-hosted & private"
+            description="Run locally. Own your data. No vendor lock-in."
           />
           <Feature
             icon={<History className="h-4 w-4" />}
-            title="Unified chat history"
-            description="One timeline across models. Stop juggling tabs and fragmented histories."
+            title="Unified history"
+            description="One timeline across all models."
           />
         </div>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-border/60">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <span>© {year} OpenGPT · MIT License</span>
-          <span>
-            Built by{" "}
-            <a
-              href="https://github.com/codexadarsh"
-              target="_blank"
-              className="underline hover:text-foreground"
-            >
-              codexadarsh
-            </a>
-          </span>
+        <div className="mx-auto flex max-w-6xl flex-col md:flex-row justify-between gap-2 px-6 py-8 text-sm text-muted-foreground">
+          <span>© {new Date().getFullYear()} OpenGPT</span>
+
+          <a
+            href="https://github.com/codexadarsh"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground"
+          >
+            codexadarsh
+          </a>
         </div>
       </footer>
     </main>
   );
 }
 
-function Feature({
-  icon,
-  title,
-  description,
-}: {
+interface FeatureProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-}) {
+}
+
+function Feature({ icon, title, description }: FeatureProps) {
   return (
-    <div className="rounded-2xl border border-border bg-secondary p-6">
-      <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-background">
+    <div className="rounded-2xl border bg-secondary p-6">
+      <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl border bg-background">
         {icon}
       </div>
-      <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-        {description}
-      </p>
+      <h3 className="font-semibold">{title}</h3>
+      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }

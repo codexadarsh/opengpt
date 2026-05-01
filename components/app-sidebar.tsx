@@ -34,7 +34,7 @@ export function AppSidebar() {
     try {
       await axios.get("/api/users/logout");
       toast.success("Logout successful");
-      router.push("/login");
+      router.push("/");
     } catch (error: unknown) {
       const message =
         error instanceof Error
@@ -85,8 +85,8 @@ export function AppSidebar() {
 
   const renderChatGroup = (
     label: string,
-    items: typeof history,
-    showLabel: boolean = true
+    items: typeof filteredGroups.today,
+    showLabel: boolean = true,
   ) => {
     if (items.length === 0) return null;
 
@@ -195,7 +195,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border p-2">
-        <Button onClick={logout} variant="destructive" className="w-full">
+        <Button onClick={logout} variant="outline" className="w-full">
           Logout
         </Button>
       </SidebarFooter>

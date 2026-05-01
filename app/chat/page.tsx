@@ -63,7 +63,7 @@ import {
 } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
 import { useChatHistoryContext } from "@/contexts/chat-history-context";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useModels } from "@/hooks/use-models";
 import { Button } from "@/components/ui/button";
 
